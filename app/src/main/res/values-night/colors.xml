@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 夜间:深底 + 浅字。仅覆盖需翻转的色;角标色沿用 day(在深卡上仍可读) -->
+    <color name="jiyue_bg">#16181C</color>
+    <color name="jiyue_card">#20242A</color>
+    <color name="jiyue_text_primary">#E8E6E1</color>
+    <color name="jiyue_text_secondary">#9AA0A8</color>
+    <!-- jiyue_ink 在夜间当「图标/前景」色 → 浅色,深底上可见 -->
+    <color name="jiyue_ink">#E8E6E1</color>
+    <!-- 主按钮夜间:仍深底 + 浅字(白字在浅底会看不见,故按钮底保持深) -->
+    <color name="btn_primary_bg">#2A2F37</color>
+    <color name="btn_primary_text">#ECEAE4</color>
+</resources>

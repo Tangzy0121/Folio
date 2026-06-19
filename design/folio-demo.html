@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Folio · 可交互原型</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --app-bg:#F2F0EA; --ink:#23272E; --ink2:#6B7178; --line:#0000000f;
+    --accent:#2E7D6B; --md:#3C7A3C; --mdbg:#DCEBD6; --html:#B45F06; --htmlbg:#FBE4CC;
+    --zip:#1F5C99; --zipbg:#D6E4F0; --gold:#E0A23C;
+    --sans:"Inter","Noto Sans SC",system-ui,sans-serif;
+    --serif:"Noto Serif SC",Georgia,serif;
+    --round:"Nunito","Noto Sans SC",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
+  body{font-family:var(--sans);background:
+      radial-gradient(1200px 600px at 12% -10%, #ECE7DC 0%, transparent 60%),
+      radial-gradient(1000px 500px at 112% 8%, #E7EEE9 0%, transparent 55%), #EDEAE2;
+    color:var(--ink);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:34px 20px 70px}
+  h1{font-size:24px;font-weight:800;letter-spacing:-.02em}
+  .top{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+  .logo{width:48px;height:48px;border-radius:13px;background:#23272E;color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;box-shadow:0 8px 20px rgba(35,39,46,.28)}
+  .sub{color:var(--ink2);font-size:13.5px;margin-top:2px}
+  .lead{margin:14px 0 22px;color:#4a5158;font-size:14.5px;line-height:1.7;max-width:560px;text-align:center}
+  .lead .hot{background:#FFF3D6;padding:2px 6px;border-radius:6px;color:#8a6a16;font-weight:600}
+
+  .phone{width:330px;height:710px;border-radius:46px;background:#0c0d0f;padding:12px;position:relative;
+    box-shadow:0 34px 70px rgba(20,22,26,.32),0 8px 18px rgba(20,22,26,.2)}
+  .screen{width:100%;height:100%;border-radius:34px;overflow:hidden;position:relative;background:var(--app-bg)}
+  .notch{position:absolute;top:15px;left:50%;transform:translateX(-50%);width:104px;height:24px;background:#0c0d0f;border-radius:0 0 17px 17px;z-index:50}
+
+  /* screen stack + transitions */
+  .scr{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--app-bg);
+    transition:transform .34s cubic-bezier(.2,.8,.2,1),opacity .3s ease;will-change:transform}
+  .scr.right{transform:translateX(100%);opacity:0;pointer-events:none}
+  .scr.left{transform:translateX(-24%);opacity:0;pointer-events:none}
+  .scr.show{transform:translateX(0);opacity:1}
+
+  .sb{display:flex;justify-content:space-between;align-items:center;padding:14px 22px 4px;font-size:12px;font-weight:600;flex:0 0 auto}
+  .sb .r{display:flex;gap:5px;opacity:.7}
+
+  /* HOME */
+  .hhead{display:flex;align-items:flex-end;justify-content:space-between;padding:10px 22px 0}
+  .htitle{font-size:32px;font-weight:800;letter-spacing:-.03em}
+  .hsubt{font-size:12.5px;color:var(--ink2);margin-top:3px}
+  .hstar{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06);color:var(--gold);cursor:pointer;font-size:18px}
+  .opencard{margin:18px 22px 4px;background:linear-gradient(180deg,#fff,#fdfdfb);border-radius:22px;padding:22px 20px;text-align:center;box-shadow:0 10px 26px rgba(35,39,46,.08);border:1px solid var(--line)}
+  .opencard .ic{width:48px;height:48px;margin:0 auto 10px;border-radius:14px;background:#F0EEE8;display:grid;place-items:center}
+  .opencard .ic svg{width:27px;height:27px;stroke:var(--ink)}
+  .opencard .hint{color:var(--ink2);font-size:13px;margin-bottom:15px}
+  .btn-dark{background:#23272E;color:#fff;border:none;border-radius:14px;padding:14px;width:100%;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:transform .12s,box-shadow .2s;box-shadow:0 6px 16px rgba(35,39,46,.22)}
+  .btn-dark:active{transform:scale(.98)}
+  .segrow{display:flex;gap:18px;padding:20px 24px 6px}
+  .seg{font-size:14px;font-weight:600;color:var(--ink2);padding:6px 2px;position:relative;cursor:pointer}
+  .seg.on{color:var(--ink)}
+  .seg .ind{position:absolute;left:0;right:0;bottom:-3px;height:3px;border-radius:3px;background:var(--ink);transform:scaleX(0);transition:transform .25s}
+  .seg.on .ind{transform:scaleX(1)}
+  .list{flex:1;overflow:auto;padding:4px 16px 18px}
+  .empty{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--ink2);font-size:13px;line-height:1.7;padding:40px}
+  .fcard{display:flex;align-items:center;gap:12px;background:#fff;border-radius:16px;padding:13px 12px;margin:9px 0;box-shadow:0 3px 12px rgba(35,39,46,.05);transition:transform .12s,box-shadow .2s;cursor:pointer;border:1px solid var(--line)}
+  .fcard:active{transform:scale(.98)}
+  .fcard:hover{box-shadow:0 10px 22px rgba(35,39,46,.10)}
+  .badge{font-size:11px;font-weight:800;padding:8px 9px;border-radius:10px;min-width:42px;text-align:center}
+  .b-md{background:var(--mdbg);color:var(--md)} .b-html{background:var(--htmlbg);color:var(--html)} .b-zip{background:var(--zipbg);color:var(--zip)}
+  .fmeta{flex:1;min-width:0}
+  .fname{font-size:14.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .fsub{font-size:11.5px;color:var(--ink2);margin-top:2px}
+  .fstar{color:#C9CCD1;font-size:19px;cursor:pointer;padding:4px}.fstar.on{color:var(--gold)}
+  .progress{height:3px;border-radius:3px;background:#00000010;margin-top:7px;overflow:hidden}
+  .progress i{display:block;height:100%;background:var(--accent);border-radius:3px}
+
+  /* READER */
+  .reader{flex:1;display:flex;flex-direction:column;position:relative;transition:background .35s ease;min-height:0}
+  .rbar{display:flex;align-items:center;gap:8px;padding:8px 12px;flex:0 0 auto}
+  .nav{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;cursor:pointer;opacity:.85;font-size:16px}
+  .nav:hover{background:#00000010}
+  .rtitle{flex:1;font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}
+  .badge.sm{font-size:10px;padding:5px 7px;min-width:0}
+  .rbody{flex:1;overflow:auto;padding:4px 22px 18px;transition:color .35s ease;min-height:0}
+  .rbody h1{font-size:1.5em;font-weight:700;margin:.3em 0 .5em;scroll-margin-top:8px}
+  .rbody h2{font-size:1.22em;font-weight:600;margin:1.1em 0 .4em;scroll-margin-top:8px}
+  .rbody p{margin:.7em 0;line-height:1.85}
+  .rbody ul{margin:.5em 0 .5em 1.2em;line-height:1.8}
+  .rbody pre{background:rgba(127,127,127,.16);border-radius:10px;padding:11px;font-family:ui-monospace,monospace;font-size:.8em;overflow:auto;margin:.7em 0}
+  .rbody blockquote{border-left:3px solid currentColor;opacity:.85;padding-left:12px;margin:.7em 0;font-style:italic}
+  .rbody table{border-collapse:collapse;width:100%;font-size:.85em;margin:.6em 0}
+  .rbody td,.rbody th{border:1px solid #88888855;padding:7px}
+
+  /* Aa docked */
+  .aa{background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:10px 14px 14px;flex:0 0 auto;box-shadow:0 -8px 24px rgba(0,0,0,.07)}
+  .aa .ttl{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:var(--ink2);letter-spacing:.05em;margin:2px 0 8px}
+  .aa .ttl .dot{width:18px;height:18px;border-radius:6px;background:#23272E;color:#fff;display:grid;place-items:center;font-size:10px}
+  .swrow{display:flex;gap:9px;overflow-x:auto;padding-bottom:4px}
+  .swcol{flex:0 0 auto;text-align:center;cursor:pointer}
+  .sw{width:38px;height:38px;border-radius:12px;border:2px solid #00000012;transition:transform .12s}
+  .swcol:hover .sw{transform:translateY(-2px)}
+  .swcol.on .sw{outline:3px solid var(--accent);outline-offset:2px}
+  .swname{font-size:9.5px;color:var(--ink2);margin-top:3px}
+  .row2{display:flex;gap:8px;margin-top:10px}
+  .fonts{display:flex;gap:6px;flex:1}
+  .fbtn{flex:1;border:1px solid #e3e1da;background:#faf9f6;border-radius:11px;padding:9px 2px;text-align:center;cursor:pointer;font-size:13px;transition:.15s}
+  .fbtn.on{border-color:var(--ink);background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .sizebox{display:flex;align-items:center;gap:6px}
+  .sbtn{width:34px;height:34px;border-radius:10px;border:1px solid #e3e1da;background:#faf9f6;font-size:15px;cursor:pointer}
+
+  /* generic bottom sheet (TOC / ZIP tree) */
+  .sheet{position:absolute;left:0;right:0;bottom:0;max-height:70%;display:flex;flex-direction:column;background:#fff;border-radius:22px 22px 0 0;box-shadow:0 -12px 34px rgba(0,0,0,.22);transform:translateY(110%);transition:transform .34s cubic-bezier(.2,.8,.2,1);z-index:30}
+  .sheet.show{transform:translateY(0)}
+  .grip{width:40px;height:4px;border-radius:4px;background:#ddd;margin:12px auto 6px}
+  .sheet h4{font-size:13px;font-weight:700;padding:4px 18px 8px;color:var(--ink)}
+  .sheet .body{overflow:auto;padding:0 12px 18px}
+  .backdrop{position:absolute;inset:0;background:rgba(0,0,0,.28);opacity:0;pointer-events:none;transition:opacity .3s;z-index:29}
+  .backdrop.show{opacity:1;pointer-events:auto}
+  .tocitem{padding:11px 12px;border-radius:10px;cursor:pointer;font-size:14px}
+  .tocitem:hover{background:#f3f1ea}
+  .tocitem.lvl2{padding-left:26px;font-size:13px;color:var(--ink2)}
+  .znode{display:flex;align-items:center;gap:9px;padding:10px;border-radius:11px;cursor:pointer;font-size:13.5px}
+  .znode:hover{background:#f3f1ea}.znode.on{background:#eaf2fb}
+  .znode.dir{font-weight:700}.znode .zi{width:20px;text-align:center}
+  .zindent{padding-left:24px}.zindent2{padding-left:44px}
+  .zhint{font-size:11.5px;color:#7a5b14;padding:9px 12px;background:#fff7e8;margin:10px 14px 4px;border-radius:12px;border:1px solid #f0e2c0;flex:0 0 auto}
+</style>
+</head>
+<body>
+  <div class="top">
+    <div class="logo">READ</div>
+    <div><h1>Folio · 可交互原型</h1><div class="sub">整套流程都能点 — 对齐后再搬进安卓</div></div>
+  </div>
+  <p class="lead">
+    <span class="hot">点文件卡片</span>进阅读页 → 底部 Aa 换<b>主题/字体/字号</b>(实时) → 左上 ‹ 返回 →
+    切<b>最近/收藏</b>、点 ★ 收藏 → 打开 <b>ZIP</b> 点右上 🗂 看<b>包内文件树</b>、点文件切换。MD 阅读页点 ☰ 看<b>目录</b>。
+  </p>
+
+  <div class="phone"><div class="notch"></div><div class="screen">
+
+    <!-- HOME -->
+    <div class="scr show" id="home">
+      <div class="sb"><span>13:39</span><span class="r">▦ ▮ 100</span></div>
+      <div class="hhead"><div><div class="htitle">Folio</div><div class="hsubt">手机里的本地网页与文档</div></div><div class="hstar" id="favEntry">★</div></div>
+      <div class="opencard">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div>
+        <div class="hint">打开 MD / HTML / 网页包 · 仅本地保存</div>
+        <button class="btn-dark" id="openBtn">选择文件</button>
+      </div>
+      <div class="segrow">
+        <div class="seg on" data-tab="recent">最近<div class="ind"></div></div>
+        <div class="seg" data-tab="fav">收藏<div class="ind"></div></div>
+      </div>
+      <div class="list" id="list"></div>
+    </div>
+
+    <!-- READER -->
+    <div class="scr right" id="reader">
+      <div class="sb" id="rsb"><span>13:39</span><span class="r">▦ ▮ 100</span></div>
+      <div class="reader" id="readerInner">
+        <div class="rbar">
+          <div class="nav" id="rBack">‹</div>
+          <div class="rtitle" id="rTitle">文件</div>
+          <div class="badge sm b-md" id="rBadge">MD</div>
+          <div class="nav" id="tocBtn">☰</div>
+        </div>
+        <div class="rbody" id="rbody"></div>
+        <div class="aa">
+          <div class="ttl"><span class="dot">Aa</span> 阅读设置 · 实时生效</div>
+          <div class="swrow" id="themes"></div>
+          <div class="row2">
+            <div class="fonts" id="fonts">
+              <div class="fbtn on" data-f="var(--sans)">无衬线</div>
+              <div class="fbtn" data-f="var(--serif)" style="font-family:var(--serif)">衬线</div>
+              <div class="fbtn" data-f="var(--round)" style="font-family:var(--round)">圆体</div>
+            </div>
+            <div class="sizebox"><button class="sbtn" id="sMinus">A−</button><button class="sbtn" id="sPlus">A＋</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="backdrop" id="tocBack"></div>
+      <div class="sheet" id="tocSheet"><div class="grip"></div><h4>目录</h4><div class="body" id="tocBody"></div></div>
+    </div>
+
+    <!-- ZIP -->
+    <div class="scr right" id="zip">
+      <div class="sb"><span>13:39</span><span class="r">▦ ▮ 100</span></div>
+      <div class="reader" style="background:#fff">
+        <div class="rbar" style="background:#fafafa">
+          <div class="nav" id="zBack">‹</div>
+          <div class="rtitle" id="zTitle">网页包</div>
+          <div class="badge sm b-zip">ZIP</div>
+          <div class="nav" id="zTreeBtn" style="background:#eaf2fb;color:#1F5C99">🗂</div>
+        </div>
+        <div class="rbody" id="zbody"></div>
+      </div>
+      <div class="backdrop" id="zBack2"></div>
+      <div class="sheet" id="zSheet">
+        <div class="grip"></div><h4>包内文件</h4>
+        <div class="zhint">🔒 看得见包里每个文件,点谁开谁</div>
+        <div class="body" id="zTree"></div>
+      </div>
+    </div>
+
+  </div></div>
+
+<script>
+/* ---------- data ---------- */
+var FILES=[
+  {id:"md1",type:"md",name:"产品需求文档.md",sub:"Markdown · 2分钟前 · 18 KB",prog:62,fav:true},
+  {id:"zip1",type:"zip",name:"数据报告网页包.zip",sub:"网页包 · 1小时前 · 2.3 MB",prog:20,fav:false},
+  {id:"html1",type:"html",name:"会议纪要.html",sub:"HTML · 昨天 · 64 KB",prog:0,fav:false}
+];
+var MD=`<h1 id="h1">Folio 阅读体验</h1>
+<p>这是正文排版示例。点下面 Aa 的<strong>主题色块/字体/字号</strong>,本页实时变化;点右上 ☰ 看目录跳转。</p>
+<h2 id="h2">一、护眼主题</h2>
+<p>背景可选护眼色温,深色即夜间模式;风景主题在文字后放很淡的渐变 + 可读遮罩。</p>
+<blockquote>别打扰阅读。</blockquote>
+<h2 id="h3">二、代码与表格</h2>
+<pre>fun main(){ println("Hello, Folio!") }</pre>
+<table><tr><th>功能</th><th>状态</th></tr><tr><td>主题</td><td>实时</td></tr><tr><td>目录</td><td>可跳</td></tr></table>
+<h2 id="h4">三、结语</h2>
+<p>长文阅读舒适、安静——这就是目标。下面还有一些占位文字方便你滚动测试进度记忆的感觉。</p>
+<p>……滚动……滚动……滚动……到底部时进度接近 100%。</p>`;
+var MDTOC=[["h1","Folio 阅读体验",1],["h2","一、护眼主题",2],["h3","二、代码与表格",2],["h4","三、结语",2]];
+var HTML=`<h1>会议纪要</h1><p>这是 HTML 文件(自包含)渲染示例,样式来自内联 CSS。</p>
+<h2>决议</h2><ul><li>上线时间确定</li><li>分工明确</li></ul><p>默认禁 JS、不联网,隐私优先。</p>`;
+var ZIPFILES={
+  "index.html":`<h1>数据报告 · 首页</h1><p>这是网页包入口页 index.html。样式/图片来自包内子目录,本地加载。</p><div style="width:120px;height:80px;border-radius:10px;background:linear-gradient(135deg,#1F5C99,#5aa0d8);margin:14px 0;display:grid;place-items:center;color:#fff;font-weight:700">chart-01</div><p>点右上 🗂 可看包内所有文件并切换。</p>`,
+  "chapter2.html":`<h1>第二章</h1><p>包内多页相对跳转正常。这是 chapter2.html。</p>`,
+  "assets/style.css":`<pre>body{font-family:sans-serif}\n.card{border-radius:12px}</pre><p style="color:#6B7178">(CSS 文件 · 文本预览)</p>`,
+  "img/logo.png":`<div style="width:140px;height:140px;border-radius:18px;background:#1F5C99;margin:10px auto;display:grid;place-items:center"><div style="width:54px;height:54px;border-radius:50%;background:#fff"></div></div><p style="text-align:center;color:#6B7178">img/logo.png · 图片预览</p>`
+};
+var ZTREE=[
+  {n:"数据报告网页包",t:"dir",d:0},
+  {n:"index.html",t:"home",d:1,k:"index.html"},
+  {n:"chapter2.html",t:"file",d:1,k:"chapter2.html"},
+  {n:"assets",t:"dir",d:1},
+  {n:"style.css",t:"css",d:2,k:"assets/style.css"},
+  {n:"img",t:"dir",d:1},
+  {n:"logo.png",t:"img",d:2,k:"img/logo.png"}
+];
+
+/* ---------- theme state (global) ---------- */
+var THEMES=[
+  {n:"纸白",bg:"#FBFAF7",fg:"#2B2B2B"},{n:"米黄",bg:"#F3E9D2",fg:"#5B4636"},
+  {n:"青墨",bg:"#E2EDE7",fg:"#27352E"},{n:"灰岩",bg:"#E6E6E4",fg:"#2D2F31"},
+  {n:"夜黑",bg:"#15171A",fg:"#C9CCD1"},{n:"深蓝夜",bg:"#0F1722",fg:"#C4D0DD"},
+  {n:"晨曦",bg:"linear-gradient(160deg,#FCEFE3,#F6E3CF 60%,#EAD3B8)",fg:"#4A3B2C"},
+  {n:"远山",bg:"linear-gradient(180deg,#DCE7EC,#C9DBE0 55%,#AEC6CB)",fg:"#2A3940"},
+  {n:"竹林",bg:"linear-gradient(165deg,#E7EFE2,#D2E4CE 60%,#B9D4B2)",fg:"#26352A"}
+];
+var theme=THEMES[0], font="var(--sans)", size=17;
+
+var $=function(id){return document.getElementById(id)};
+var reader=$('readerInner'), rbody=$('rbody'), rsb=$('rsb');
+
+/* build Aa */
+(function(){
+  var box=$('themes');
+  THEMES.forEach(function(t,i){
+    var c=document.createElement('div');c.className='swcol'+(i===0?' on':'');
+    var s=document.createElement('div');s.className='sw';s.style.background=t.bg;
+    var n=document.createElement('div');n.className='swname';n.textContent=t.n;
+    c.appendChild(s);c.appendChild(n);
+    c.onclick=function(){theme=t;applyTheme();var a=box.children;for(var k=0;k<a.length;k++)a[k].classList.remove('on');c.classList.add('on')};
+    box.appendChild(c);
+  });
+  var fb=document.querySelectorAll('#fonts .fbtn');
+  for(var i=0;i<fb.length;i++)(function(b){b.onclick=function(){for(var k=0;k<fb.length;k++)fb[k].classList.remove('on');b.classList.add('on');font=b.getAttribute('data-f');applyTheme()}})(fb[i]);
+  $('sPlus').onclick=function(){size=Math.min(26,size+1);applyTheme()};
+  $('sMinus').onclick=function(){size=Math.max(14,size-1);applyTheme()};
+})();
+function applyTheme(){reader.style.background=theme.bg;rbody.style.color=theme.fg;rbody.style.fontFamily=font;rbody.style.fontSize=size+'px';rsb.style.color=theme.fg}
+
+/* ---------- navigation ---------- */
+function go(fromId,toId){
+  var f=$(fromId),t=$(toId);
+  t.classList.remove('right','left');t.classList.add('show');
+  f.classList.remove('show');f.classList.add(fromId==='home'?'left':'right');
+}
+function back(fromId){
+  var f=$(fromId);f.classList.remove('show');f.classList.add('right');
+  $('home').classList.remove('left','right');$('home').classList.add('show');
+}
+
+/* ---------- home list ---------- */
+var tab='recent';
+function renderList(){
+  var box=$('list');box.innerHTML='';
+  var data=FILES.filter(function(f){return tab==='fav'?f.fav:true});
+  if(!data.length){box.innerHTML='<div class="empty">还没有收藏<br>在文件卡片点 ☆ 收藏</div>';return}
+  data.forEach(function(f){
+    var bcls=f.type==='md'?'b-md':f.type==='zip'?'b-zip':'b-html';
+    var blab=f.type.toUpperCase();
+    var card=document.createElement('div');card.className='fcard';
+    card.innerHTML='<div class="badge '+bcls+'">'+blab+'</div>'+
+      '<div class="fmeta"><div class="fname">'+f.name+'</div><div class="fsub">'+f.sub+'</div>'+
+      (f.prog?'<div class="progress"><i style="width:'+f.prog+'%"></i></div>':'')+'</div>'+
+      '<div class="fstar'+(f.fav?' on':'')+'">★</div>';
+    card.querySelector('.fstar').onclick=function(e){e.stopPropagation();f.fav=!f.fav;renderList()};
+    card.onclick=function(){openFile(f)};
+    box.appendChild(card);
+  });
+}
+function openFile(f){
+  if(f.type==='zip'){ openZip(f); return; }
+  $('rTitle').textContent=f.name;
+  var b=$('rBadge');b.className='badge sm '+(f.type==='md'?'b-md':'b-html');b.textContent=f.type.toUpperCase();
+  rbody.innerHTML=f.type==='md'?MD:HTML;
+  applyTheme();
+  rbody.scrollTop=0;
+  $('tocBtn').style.display=f.type==='md'?'grid':'none';
+  go('home','reader');
+}
+function openZip(f){
+  $('zTitle').textContent=f.name;
+  loadZip('index.html');
+  renderTree();
+  go('home','zip');
+}
+
+/* tabs */
+document.querySelectorAll('.seg').forEach(function(s){s.onclick=function(){
+  document.querySelectorAll('.seg').forEach(function(x){x.classList.remove('on')});s.classList.add('on');
+  tab=s.getAttribute('data-tab');renderList();
+}});
+$('favEntry').onclick=function(){document.querySelectorAll('.seg').forEach(function(x){x.classList.remove('on')});document.querySelector('.seg[data-tab="fav"]').classList.add('on');tab='fav';renderList()};
+$('openBtn').onclick=function(){ // 模拟选文件:加一条到最近
+  var demo={id:"new",type:"md",name:"新打开的文档.md",sub:"Markdown · 刚刚 · 5 KB",prog:0,fav:false};
+  if(!FILES.find(function(x){return x.id==="new"}))FILES.unshift(demo);
+  tab='recent';document.querySelectorAll('.seg').forEach(function(x){x.classList.remove('on')});document.querySelector('.seg[data-tab="recent"]').classList.add('on');
+  renderList();openFile(demo);
+};
+
+/* reader back + TOC */
+$('rBack').onclick=function(){back('reader')};
+$('tocBtn').onclick=function(){buildTOC();$('tocSheet').classList.add('show');$('tocBack').classList.add('show')};
+$('tocBack').onclick=function(){$('tocSheet').classList.remove('show');$('tocBack').classList.remove('show')};
+function buildTOC(){
+  var b=$('tocBody');b.innerHTML='';
+  MDTOC.forEach(function(h){
+    var d=document.createElement('div');d.className='tocitem'+(h[2]===2?' lvl2':'');d.textContent=h[1];
+    d.onclick=function(){var el=rbody.querySelector('#'+h[0]);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});$('tocSheet').classList.remove('show');$('tocBack').classList.remove('show')};
+    b.appendChild(d);
+  });
+}
+
+/* zip */
+$('zBack').onclick=function(){back('zip')};
+$('zTreeBtn').onclick=function(){$('zSheet').classList.add('show');$('zBack2').classList.add('show')};
+$('zBack2').onclick=function(){$('zSheet').classList.remove('show');$('zBack2').classList.remove('show')};
+function loadZip(key){$('zbody').innerHTML=ZIPFILES[key]||'<p>（无预览）</p>';$('zbody').scrollTop=0;curZip=key;renderTree()}
+var curZip='index.html';
+function renderTree(){
+  var box=$('zTree');box.innerHTML='';
+  var icons={dir:'📂',home:'🏠',file:'📄',css:'🎨',img:'🖼'};
+  ZTREE.forEach(function(z){
+    var d=document.createElement('div');
+    d.className='znode '+(z.t==='dir'?'dir ':'')+(z.d===1?'zindent':z.d===2?'zindent2':'')+(z.k===curZip?' on':'');
+    d.innerHTML='<span class="zi">'+(icons[z.t]||'📄')+'</span> '+z.n+(z.t==='home'?' <span style="margin-left:auto;font-size:11px;color:#1F5C99">入口</span>':'');
+    if(z.k)d.onclick=function(){loadZip(z.k);$('zSheet').classList.remove('show');$('zBack2').classList.remove('show')};
+    box.appendChild(d);
+  });
+}
+
+/* init */
+applyTheme();renderList();
+</script>
+</body>
+</html>

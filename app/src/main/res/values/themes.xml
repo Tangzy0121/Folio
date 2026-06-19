@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- 全局 DayNight:首页与 chrome 随日夜翻转(颜色来自 colors.xml / values-night) -->
+    <style name="Theme.JiYue" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/jiyue_bg</item>
+        <item name="android:statusBarColor">@color/jiyue_bg</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="colorPrimary">@color/jiyue_ink</item>
+        <item name="colorOnPrimary">@color/btn_primary_text</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Folio.Activity</item>
+    </style>
+
+    <!-- 全局页面转场:打开淡入上浮、返回反向(首页↔阅读页统一) -->
+    <style name="Animation.Folio.Activity" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_open_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_close_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_close_exit</item>
+    </style>
+</resources>

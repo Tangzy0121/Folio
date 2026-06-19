@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 即阅 设计语言:暖灰白 + 深墨 -->
+    <color name="jiyue_bg">#F5F4EF</color>
+    <color name="jiyue_ink">#22272E</color>
+    <color name="jiyue_card">#FFFFFFFF</color>
+    <color name="jiyue_text_primary">#22272E</color>
+    <color name="jiyue_text_secondary">#8A8F98</color>
+    <!-- 主按钮(随日夜翻转) -->
+    <color name="btn_primary_bg">#22272E</color>
+    <color name="btn_primary_text">#FFFFFFFF</color>
+    <!-- 类型角标 -->
+    <color name="badge_md_bg">#D9EAD3</color>
+    <color name="badge_md_text">#3C7A3C</color>
+    <color name="badge_html_bg">#FCE5CD</color>
+    <color name="badge_html_text">#B45F06</color>
+    <color name="badge_zip_bg">#D6E4F0</color>
+    <color name="badge_zip_text">#1F5C99</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+</resources>

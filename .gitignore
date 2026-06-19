@@ -1,0 +1,24 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# 补强:所有模块构建产物 / Kotlin 构建缓存 / 整个 .idea / APK 等不进仓
+**/build/
+.kotlin/
+.idea/
+*.apk
+*.aab
+*.keystore
+*.jks

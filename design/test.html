@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Folio HTML 渲染测试</title>
+  <style>
+    body { line-height: 1.7; padding: 16px; max-width: 720px; margin: 0 auto; }
+    h1 { border-bottom: 2px solid currentColor; padding-bottom: 6px; }
+    code { background: rgba(127,127,127,.18); padding: 2px 5px; border-radius: 4px; }
+    pre { background: rgba(127,127,127,.14); padding: 12px; border-radius: 8px; overflow-x: auto; }
+    pre code { background: none; padding: 0; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+    th, td { border: 1px solid rgba(127,127,127,.4); padding: 6px 10px; text-align: left; }
+    blockquote { border-left: 4px solid rgba(127,127,127,.5); margin: 12px 0; padding: 4px 14px; opacity: .9; }
+    .tag { display: inline-block; padding: 2px 10px; border-radius: 99px; background: rgba(79,160,139,.2); font-size: 13px; }
+    img { max-width: 100%; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Folio HTML 渲染测试 · test.html</h1>
+  <p>这份 HTML 用来检验 <strong>HTML 阅读页</strong>:阅读主题会把背景/文字色/字体注入到 <code>html,body</code>,而本文件自带的边框、圆角、表格样式应当保留。<span class="tag">本地安全 · JS 默认关</span></p>
+
+  <h2>1. 文本与列表</h2>
+  <p>普通段落,带 <em>斜体</em>、<strong>加粗</strong>、<code>行内代码</code> 和 <a href="https://example.com">链接</a>。</p>
+  <ul>
+    <li>无序项 A</li>
+    <li>无序项 B
+      <ul><li>嵌套项 B-1</li><li>嵌套项 B-2</li></ul>
+    </li>
+  </ul>
+  <ol>
+    <li>有序项一</li>
+    <li>有序项二</li>
+  </ol>
+
+  <h2>2. 引用</h2>
+  <blockquote>这是一段引用文本,左侧应有竖条,整体略微降低不透明度。</blockquote>
+
+  <h2>3. 代码块(可横滑)</h2>
+  <pre><code>function greet(name) {
+  // 一行很长的注释 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  return `Hello, ${name}! Welcome to Folio.`;
+}
+console.log(greet("World"));</code></pre>
+
+  <h2>4. 表格</h2>
+  <table>
+    <thead><tr><th>功能</th><th>状态</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>主题注入</td><td>✅</td><td>背景/文字/字体随阅读主题</td></tr>
+      <tr><td>JS 开关</td><td>✅</td><td>默认关,可在工具栏开启</td></tr>
+      <tr><td>ZIP 网页包</td><td>✅</td><td>另走 WebViewAssetLoader</td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. 图片(data-URI)</h2>
+  <p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAABQCAIAAABd+SbeAAADvUlEQVR4nO3da0iTURzH8f+ZBhmZWlSPGmqGa2TZxUxbi1hRSEQYeaGigoLI7nQx60VRL4puRtmLim4YUaIlBJH0ptTKdFlZqUu0lpdNpcjZbeZ6FnMhkVtWyN/Lfp8XMs8Oh4evh+MGz5hQxe0XREII0f5DYX+AX0X31yBggdBMEJoJQjNBaCYIzQShmXi6euJJ1k6ua+hXck5VOR3Hju7pHe0QlXQEbxTF3733S9ik/ENJ7GgmCM0EoZkgNBOEZoLQTBCaCUIzQWgmCM0EoZkgNBOEZoLQTBCaCUIzQWgmCM0EoZkgNBOEZoLQTBC6d9zX0aXb55P1rxsFCSJ69MxwI7f0twlX01cs3Xg5KMAvXCndydO7Wuf0kfjkHdlEdCYtvvSl8cylR47xVcujJk8M3JJyk4hmxISoY0Jk2fb1a1tWdqm5pZXcJ7TVKm89kPPrDSVO1Rg/1Jmaxd8tKI30ViiETbYJQcOHDbZaZSJSKUdETPA/nl4gy7a5s8OSEiedPVdE7hP6N34+g7at1g4cOMDSaj15Mb/Z/KXjqcsnlq3YfMV3iNe6lRov+4S2sxmF5o+Wzou8rW0OCRr6xvB+VKBvndEsSd5ENEcbdut2xffvshDi/kNDSLBf+x+D3PSMXrNEfa+oKuXgzbyiqlWJ0Z0nrEyIeqB7s/do7kOdYdniSKeLvKxoCFeNJKJwlVSub3QM+kve9Saz43Frq/XCJZ0s24jcJrSnpyJt96K03YuO7YobJflGqALyi6uJqKD4dYQqoPP8cKVU+NhgP9BL3o4bKzlds0zfMG6sPbQqbHhFZZNj0EPx81K1s8ZsSFanpmipT+n2M7qrc1h0fVB//vJNttmG+g4iIoulzTHY9O5ToL9PTW3z3bzqYl3t/j3zqE/p5qOjVF+viQolIs3U0S9eGTtPKHtliokMJqLoKUHllQ2u1imraIhbML5jOxPRg0LD/FiVh4f9gjVq+2sPcufQ564Vzp6uPLxroXZ62IVM+6sCY2NL/PyJHRMyrj+eGR26b3usZlroleslrtZ5XmaKnhr8otzUMaIrqamrN6du165fqza3WGS57/wfbCdcfXL2aVYq7o9W/Pv90TmnqvDJ2Z6Et+BMEJoJQjNBaCYIzQShmSA0E4RmgtBMEJoJQjNBaCYIzQShmSA0E4RmgtBMEJoJQjNBaCYIzQShmSA0E4RmgtBMELp33Lary9zBdSX9HHZ0T+/oKQmH8LUsiv/64hWnPbGjmSA0E4RmgtBMEJoJQjNBaOLxA9QyE6Z+IA6MAAAAAElFTkSuQmCC" alt="示例图片"></p>
+
+  <hr>
+  <p style="text-align:center; opacity:.7;">test.html 结束 · 若背景/文字随主题变、表格与代码框样式保留,则 HTML 阅读页通过</p>
+</body>
+</html>

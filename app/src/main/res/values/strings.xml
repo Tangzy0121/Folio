@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Folio</string>
+    <string name="home_subtitle">手机里的本地网页与文档预览器</string>
+    <string name="open_card_hint">MD / HTML,仅本地保存</string>
+    <string name="open_action">选择文件</string>
+    <string name="tab_recent">最近</string>
+    <string name="tab_favorites">收藏</string>
+    <string name="empty_hint">还没有打开过文件\n点上面「选择文件」开始</string>
+    <string name="cd_favorites">收藏</string>
+    <string name="cd_doc_icon">文档</string>
+</resources>
