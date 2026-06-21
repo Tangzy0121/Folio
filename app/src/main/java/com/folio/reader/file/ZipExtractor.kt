@@ -14,6 +14,13 @@ object ZipExtractor {
     data class Result(val dir: File, val entry: String)
 
     fun extract(zip: File, destDir: File): Result {
+        unzip(zip, destDir)
+        val entry = findEntry(destDir) ?: throw IOException("ZIP 里没有找到 HTML 入口页")
+        return Result(destDir, entry)
+    }
+
+    /** 纯解压(zip-slip 安全),不要求入口页。EPUB 等用它。 */
+    fun unzip(zip: File, destDir: File) {
         if (destDir.exists()) destDir.deleteRecursively()
         destDir.mkdirs()
         val base = destDir.canonicalPath
@@ -36,9 +43,6 @@ object ZipExtractor {
                 e = zis.nextEntry
             }
         }
-
-        val entry = findEntry(destDir) ?: throw IOException("ZIP 里没有找到 HTML 入口页")
-        return Result(destDir, entry)
     }
 
     /** 入口页:根 index.html 优先;否则取「最浅 + 名为 index」的 *.html。返回相对路径(/ 分隔)。 */

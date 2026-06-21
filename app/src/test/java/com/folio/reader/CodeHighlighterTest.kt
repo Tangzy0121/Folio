@@ -69,4 +69,23 @@ class CodeHighlighterTest {
         // 不抛异常即可;字符串在行尾截断
         assertTrue(t.any { it.kind == Kind.STRING })
     }
+
+    @Test
+    fun functionCallAndOperatorHighlighted() {
+        val src = "foo(1) + bar()"
+        val t = CodeHighlighter.tokenize(src, "js")
+        assertTrue("foo 应为函数", t.text(src, Kind.FUNCTION).contains("foo"))
+        assertTrue("bar 应为函数", t.text(src, Kind.FUNCTION).contains("bar"))
+        assertTrue("+ 应为运算符", t.text(src, Kind.OPERATOR).contains("+"))
+    }
+
+    @Test
+    fun keywordBeforeParenStaysKeyword() {
+        // if 后跟 ( 仍是关键字,不能被误判为函数
+        val src = "if (x) { y() }"
+        val t = CodeHighlighter.tokenize(src, "js")
+        assertTrue("if 是关键字", t.text(src, Kind.KEYWORD).contains("if"))
+        assertTrue("if 不应是函数", !t.text(src, Kind.FUNCTION).contains("if"))
+        assertTrue("y 是函数", t.text(src, Kind.FUNCTION).contains("y"))
+    }
 }

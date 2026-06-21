@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 文件列表列数:手机单列;平板限定符里覆盖 -->
+    <integer name="folio_file_columns">1</integer>
+    <!-- 书架封面列数:手机 3,平板更多 -->
+    <integer name="folio_book_columns">3</integer>
+</resources>

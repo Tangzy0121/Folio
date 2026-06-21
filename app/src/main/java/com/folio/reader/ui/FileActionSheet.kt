@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import android.app.Dialog
 import com.google.android.material.color.MaterialColors
 import com.folio.reader.R
 
@@ -36,7 +36,6 @@ class FileActionSheet(
     private val outline by lazy { attr(com.google.android.material.R.attr.colorOutline, 0x22888888) }
 
     fun show() {
-        val dialog = BottomSheetDialog(ctx)
         val root = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(0, dp(10), 0, dp(12))
@@ -69,15 +68,14 @@ class FileActionSheet(
             setBackgroundColor(outline)
         })
 
+        val dialog = AdaptiveSheet.create(ctx, root)
         actions.forEach { a ->
             root.addView(actionRow(a, dialog))
         }
-
-        dialog.setContentView(root)
         dialog.show()
     }
 
-    private fun actionRow(a: Action, dialog: BottomSheetDialog): View {
+    private fun actionRow(a: Action, dialog: Dialog): View {
         val color = if (a.danger) error else onSurface
         val row = LinearLayout(ctx).apply {
             orientation = LinearLayout.HORIZONTAL

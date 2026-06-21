@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 即阅 设计语言:暖灰白 + 深墨 -->
-    <color name="jiyue_bg">#F5F4EF</color>
-    <color name="jiyue_ink">#22272E</color>
-    <color name="jiyue_card">#FFFFFFFF</color>
-    <color name="jiyue_text_primary">#22272E</color>
-    <color name="jiyue_text_secondary">#8A8F98</color>
-    <!-- 主按钮(随日夜翻转) -->
-    <color name="btn_primary_bg">#22272E</color>
-    <color name="btn_primary_text">#FFFFFFFF</color>
+    <!-- Folio v19 premium 浅色:暖纸底 + 青绿 accent -->
+    <color name="jiyue_bg">#FAF8F3</color>
+    <color name="jiyue_ink">#23211C</color>
+    <color name="jiyue_card">#FFFFFF</color>
+    <color name="jiyue_text_primary">#23211C</color>
+    <color name="jiyue_text_secondary">#6F6A60</color>
+    <!-- 主按钮:v19 起用 accent 青绿(原深墨观感偏旧) -->
+    <color name="btn_primary_bg">#2F9C84</color>
+    <color name="btn_primary_text">#FFFFFF</color>
     <!-- 类型角标 -->
     <color name="badge_md_bg">#D9EAD3</color>
     <color name="badge_md_text">#3C7A3C</color>
@@ -16,6 +16,17 @@
     <color name="badge_html_text">#B45F06</color>
     <color name="badge_zip_bg">#D6E4F0</color>
     <color name="badge_zip_text">#1F5C99</color>
+    <color name="badge_pdf_bg">#FBE0DE</color>
+    <color name="badge_pdf_text">#C5221F</color>
+    <color name="badge_epub_bg">#E7E0F6</color>
+    <color name="badge_epub_text">#6A3FB5</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black">#FF000000</color>
+    <!-- v19 设计 token(深色在 values-night 覆盖) -->
+    <color name="folio_accent">#2F9C84</color>
+    <color name="folio_accent_strong">#1E7A66</color>
+    <color name="folio_surface2">#F4F0E8</color>
+    <color name="folio_line">#E9E3D7</color>
+    <color name="folio_soft">#E4F1ED</color>
+    <color name="folio_code_bg">#F6F8FA</color>
 </resources>

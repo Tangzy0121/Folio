@@ -15,8 +15,17 @@ class FileTypeDetectorTest {
         assertEquals(FileType.HTML, FileTypeDetector.byName("x.html"))
         assertEquals(FileType.HTML, FileTypeDetector.byName("y.htm"))
         assertEquals(FileType.ZIP, FileTypeDetector.byName("site.zip"))
-        assertEquals(FileType.UNSUPPORTED, FileTypeDetector.byName("note.txt"))
+        assertEquals(FileType.PDF, FileTypeDetector.byName("book.pdf"))
+        // txt/text/log 纯文本归 Markdown 阅读页(v22 起)
+        assertEquals(FileType.MARKDOWN, FileTypeDetector.byName("note.txt"))
+        assertEquals(FileType.UNSUPPORTED, FileTypeDetector.byName("a.docx"))
         assertEquals(FileType.UNSUPPORTED, FileTypeDetector.byName(null))
+    }
+
+    @Test
+    fun sniffPdfMagic() {
+        val pdf = byteArrayOf('%'.code.toByte(), 'P'.code.toByte(), 'D'.code.toByte(), 'F'.code.toByte(), '-'.code.toByte())
+        assertEquals(FileType.PDF, FileTypeDetector.sniff(pdf))
     }
 
     @Test

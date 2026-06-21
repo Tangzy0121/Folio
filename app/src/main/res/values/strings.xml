@@ -5,7 +5,20 @@
     <string name="open_action">选择文件</string>
     <string name="tab_recent">最近</string>
     <string name="tab_favorites">收藏</string>
+    <string name="tab_books">书架</string>
+    <string name="tab_docs">文档</string>
     <string name="empty_hint">还没有打开过文件\n点上面「选择文件」开始</string>
     <string name="cd_favorites">收藏</string>
     <string name="cd_doc_icon">文档</string>
+    <!-- v17 新建文档 -->
+    <string name="new_doc_action">＋ 新建空白文档</string>
+    <string name="new_doc_title">新建文档</string>
+    <string name="new_doc_default">未命名</string>
+    <!-- v17 使用指引 -->
+    <string name="guide_title">使用指引</string>
+    <string name="guide_entry">使用指引</string>
+    <string name="welcome_title">👋 欢迎使用 Folio</string>
+    <string name="welcome_msg">本地 Markdown 阅读 &amp; 轻编辑,纯离线 · 不上传 · 不要账号。\n花 30 秒了解怎么用?</string>
+    <string name="welcome_view">查看指引</string>
+    <string name="welcome_skip">跳过</string>
 </resources>

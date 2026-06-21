@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- 单色剪影(主题图标用,颜色由系统着色) -->
+    <group
+        android:translateX="-9.7"
+        android:translateY="-3.2"
+        android:scaleX="1.08"
+        android:scaleY="1.08">
+        <path
+            android:pathData="M36.5,32.5 L36.5,74.5 M36.5,32.5 L56.5,32.5 M36.5,52.5 L50.5,52.5"
+            android:strokeColor="#000000"
+            android:strokeWidth="11"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M59,60 a13,13 0 1,0 26,0 a13,13 0 1,0 -26,0"
+            android:strokeColor="#000000"
+            android:strokeWidth="6" />
+        <path
+            android:pathData="M68.6,60 a3.4,3.4 0 1,0 6.8,0 a3.4,3.4 0 1,0 -6.8,0"
+            android:fillColor="#000000" />
+    </group>
+</vector>

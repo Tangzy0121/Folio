@@ -69,6 +69,7 @@ class FileCardAdapter(
                 FileType.MARKDOWN -> set("MD", R.drawable.bg_badge_md, R.color.badge_md_text)
                 FileType.HTML -> set("HTML", R.drawable.bg_badge_html, R.color.badge_html_text)
                 FileType.ZIP -> set("ZIP", R.drawable.bg_badge_zip, R.color.badge_zip_text)
+                FileType.PDF -> set("PDF", R.drawable.bg_badge_pdf, R.color.badge_pdf_text)
                 FileType.UNSUPPORTED -> set("?", R.drawable.bg_badge_md, R.color.badge_md_text)
             }
         }
@@ -83,6 +84,7 @@ class FileCardAdapter(
             FileType.MARKDOWN -> "Markdown"
             FileType.HTML -> "HTML"
             FileType.ZIP -> "网页包"
+            FileType.PDF -> "PDF"
             FileType.UNSUPPORTED -> "未知"
         }
     }

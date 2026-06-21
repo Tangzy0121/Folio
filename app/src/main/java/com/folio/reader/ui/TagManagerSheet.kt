@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -40,7 +39,6 @@ class TagManagerSheet(
     private lateinit var listBox: LinearLayout
 
     fun show() {
-        val dialog = BottomSheetDialog(ctx)
         val root = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(0, dp(10), 0, dp(12))
@@ -68,8 +66,8 @@ class TagManagerSheet(
         })
         populate()
 
+        val dialog = AdaptiveSheet.create(ctx, root)
         dialog.setOnDismissListener { onChanged() }
-        dialog.setContentView(root)
         dialog.show()
     }
 

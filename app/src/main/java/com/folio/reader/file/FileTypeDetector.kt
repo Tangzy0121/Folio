@@ -1,7 +1,7 @@
 package com.folio.reader.file
 
 /** 支持的文件类型。 */
-enum class FileType { MARKDOWN, HTML, ZIP, UNSUPPORTED }
+enum class FileType { MARKDOWN, HTML, ZIP, PDF, UNSUPPORTED }
 
 /**
  * 判定文件类型:优先按扩展名;扩展名缺失/不可信时用文件头嗅探。
@@ -9,9 +9,11 @@ enum class FileType { MARKDOWN, HTML, ZIP, UNSUPPORTED }
  */
 object FileTypeDetector {
 
-    private val MD_EXT = setOf("md", "markdown", "mdown", "mkd")
+    // txt/text/log 纯文本也走 Markdown 阅读页渲染(无语法即按段落显示)
+    private val MD_EXT = setOf("md", "markdown", "mdown", "mkd", "txt", "text", "log")
     private val HTML_EXT = setOf("html", "htm", "xhtml")
     private val ZIP_EXT = setOf("zip")
+    private val PDF_EXT = setOf("pdf")
 
     fun byName(name: String?): FileType {
         val ext = name?.substringAfterLast('.', "")?.lowercase().orEmpty()
@@ -19,6 +21,7 @@ object FileTypeDetector {
             in MD_EXT -> FileType.MARKDOWN
             in HTML_EXT -> FileType.HTML
             in ZIP_EXT -> FileType.ZIP
+            in PDF_EXT -> FileType.PDF
             else -> FileType.UNSUPPORTED
         }
     }
@@ -29,6 +32,12 @@ object FileTypeDetector {
             head[0] == 'P'.code.toByte() && head[1] == 'K'.code.toByte() &&
             head[2] == 3.toByte() && head[3] == 4.toByte()
         ) return FileType.ZIP
+
+        // PDF 魔数 %PDF
+        if (head.size >= 4 &&
+            head[0] == '%'.code.toByte() && head[1] == 'P'.code.toByte() &&
+            head[2] == 'D'.code.toByte() && head[3] == 'F'.code.toByte()
+        ) return FileType.PDF
 
         val text = String(head, Charsets.UTF_8).trimStart().lowercase()
         if (text.startsWith("<!doctype html") || text.startsWith("<html") ||

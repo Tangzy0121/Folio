@@ -23,3 +23,7 @@ local.properties
 *.keystore
 *.jks
 keystore.properties
+
+# 个人测试样例 / 设计草稿,不进仓
+TestFiles/
+design/

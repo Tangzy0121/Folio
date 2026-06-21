@@ -5,18 +5,21 @@ import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 
 /**
- * 轻量代码高亮:单趟词法扫描(逐字符判定 注释/字符串/数字/标识符),不用注解处理器、零新依赖。
+ * 轻量代码高亮:单趟词法扫描,向 IDE 观感靠拢。
+ * token 类:关键字 / 字符串 / 注释 / 数字 / 类型 / 函数 / 运算符 / 内置 / 注解。
  *
- * 设计取舍(实事求是):
- * - 单趟扫描天然避免「注释/字符串里的关键字被误着色」,但不做完整语法分析,转义/边界等够用即可。
- * - 语言未知或不在表中 → 回退通用关键字集 + C 系注释规则,仍能上色,不报错。
- * - 分词逻辑 [tokenize] 不依赖 android.*,可在纯 JVM 单测;[highlight] 仅按 token 上色。
+ * 取舍(实事求是):
+ * - 纯词法,无真语义分析(分不清变量与类型的真实绑定),"函数/内置/类型"靠启发式(后跟`(`=函数、内置表、首字母大写=类型)。
+ * - 单趟扫描天然避免「注释/字符串里的关键字被误着色」。
+ * - 分词 [tokenize] 不依赖 android.*,可在纯 JVM 单测;[highlight] 仅按 token 上色。
  */
 object CodeHighlighter {
 
-    enum class Kind { KEYWORD, STRING, COMMENT, NUMBER, TYPE }
+    enum class Kind { KEYWORD, STRING, COMMENT, NUMBER, TYPE, FUNCTION, OPERATOR, BUILTIN, ANNOTATION }
 
     data class Token(val start: Int, val end: Int, val kind: Kind)
+
+    private const val OP_CHARS = "+-*/%=<>!&|^~?:"
 
     fun highlight(code: CharSequence, language: String?, style: CodeStyle): CharSequence {
         val out = SpannableStringBuilder(code)
@@ -27,6 +30,10 @@ object CodeHighlighter {
                 Kind.COMMENT -> style.comment
                 Kind.NUMBER -> style.number
                 Kind.TYPE -> style.type
+                Kind.FUNCTION -> style.function
+                Kind.OPERATOR -> style.operator
+                Kind.BUILTIN -> style.type
+                Kind.ANNOTATION -> style.type
             }
             out.setSpan(ForegroundColorSpan(color), t.start, t.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
@@ -37,10 +44,11 @@ object CodeHighlighter {
     fun tokenize(s: String, language: String?): List<Token> {
         val lang = normalize(language)
         val kw = keywordsFor(lang)
+        val bi = builtinsFor(lang)
         val sqlCaseInsensitive = lang == "sql"
         val hashComment = lang == "python" || lang == "ruby" || lang == "shell" || lang == "yaml" || lang == "toml"
         val dashComment = lang == "sql"
-        val slashComment = !hashComment  // C 系默认 //
+        val slashComment = !hashComment
 
         val tokens = ArrayList<Token>()
         val n = s.length
@@ -76,10 +84,17 @@ object CodeHighlighter {
                 while (j < n) {
                     if (s[j] == '\\') { j += 2; continue }
                     if (s[j] == c) { j++; break }
-                    if (s[j] == '\n' && c != '`') { break }  // 反引号可跨行
+                    if (s[j] == '\n' && c != '`') { break }
                     j++
                 }
                 tokens.add(Token(i, j.coerceAtMost(n), Kind.STRING)); i = j; continue
+            }
+
+            // 注解 / 装饰器 @name
+            if (c == '@' && i + 1 < n && (s[i + 1].isLetter() || s[i + 1] == '_')) {
+                var j = i + 1
+                while (j < n && (s[j].isLetterOrDigit() || s[j] == '_')) j++
+                tokens.add(Token(i, j, Kind.ANNOTATION)); i = j; continue
             }
 
             // 数字
@@ -89,7 +104,7 @@ object CodeHighlighter {
                 tokens.add(Token(i, j, Kind.NUMBER)); i = j; continue
             }
 
-            // 标识符 / 关键字 / 类型
+            // 标识符 / 关键字 / 函数 / 内置 / 类型
             if (c.isLetter() || c == '_') {
                 var j = i + 1
                 while (j < n && (s[j].isLetterOrDigit() || s[j] == '_')) j++
@@ -97,14 +112,30 @@ object CodeHighlighter {
                 val probe = if (sqlCaseInsensitive) word.uppercase() else word
                 when {
                     kw.contains(probe) -> tokens.add(Token(i, j, Kind.KEYWORD))
+                    nextNonSpace(s, j) == '(' -> tokens.add(Token(i, j, Kind.FUNCTION))
+                    bi.contains(word) -> tokens.add(Token(i, j, Kind.BUILTIN))
                     word[0].isUpperCase() -> tokens.add(Token(i, j, Kind.TYPE))
                 }
                 i = j; continue
             }
 
+            // 运算符(连续合并,如 == => -> && |=)
+            if (OP_CHARS.indexOf(c) >= 0) {
+                var j = i + 1
+                while (j < n && OP_CHARS.indexOf(s[j]) >= 0) j++
+                tokens.add(Token(i, j, Kind.OPERATOR)); i = j; continue
+            }
+
             i++
         }
         return tokens
+    }
+
+    /** 跳过空格/制表(不跨行)后的下一个字符,用于判断标识符是否为函数调用。 */
+    private fun nextNonSpace(s: String, from: Int): Char? {
+        var k = from
+        while (k < s.length && (s[k] == ' ' || s[k] == '\t')) k++
+        return if (k < s.length) s[k] else null
     }
 
     private fun lineEnd(s: String, from: Int): Int =
@@ -135,6 +166,18 @@ object CodeHighlighter {
         "go" -> GO
         "rust" -> RUST
         else -> GENERIC
+    }
+
+    private fun builtinsFor(lang: String): Set<String> = when (lang) {
+        "python" -> PYTHON_BI
+        "js" -> JS_BI
+        "kotlin" -> KOTLIN_BI
+        "java" -> JAVA_BI
+        "cpp" -> CPP_BI
+        "go" -> GO_BI
+        "rust" -> RUST_BI
+        "generic" -> GENERIC_BI
+        else -> emptySet()
     }
 
     private val PYTHON = setOf(
@@ -187,4 +230,38 @@ object CodeHighlighter {
         "Self", "true", "false", "where", "async", "await", "move", "ref", "as", "dyn"
     )
     private val GENERIC = JS + KOTLIN + CPP
+
+    // 内置函数 / 常用类型(用 type 色)。modest 集,够日常代码片段用。
+    private val PYTHON_BI = setOf(
+        "print", "len", "range", "str", "int", "float", "bool", "list", "dict", "set", "tuple",
+        "open", "input", "super", "isinstance", "enumerate", "zip", "map", "filter", "sum", "min",
+        "max", "abs", "round", "sorted", "reversed", "type", "repr", "format", "any", "all", "next", "iter"
+    )
+    private val JS_BI = setOf(
+        "console", "document", "window", "Math", "JSON", "Array", "Object", "String", "Number",
+        "Boolean", "Promise", "Map", "Set", "Symbol", "Date", "RegExp", "parseInt", "parseFloat",
+        "isNaN", "setTimeout", "setInterval", "fetch", "require", "module", "process"
+    )
+    private val KOTLIN_BI = setOf(
+        "println", "print", "listOf", "mutableListOf", "mapOf", "mutableMapOf", "setOf", "arrayOf",
+        "run", "let", "apply", "also", "with", "lazy", "require", "check", "error", "TODO",
+        "String", "Int", "Boolean", "Long", "Double", "Float", "List", "Map", "Set", "Array", "MutableList"
+    )
+    private val JAVA_BI = setOf(
+        "System", "String", "Integer", "Long", "Double", "Float", "Boolean", "Math", "Object",
+        "List", "Map", "Set", "ArrayList", "HashMap", "Arrays", "Collections", "Optional", "Stream", "Exception"
+    )
+    private val CPP_BI = setOf(
+        "std", "cout", "cin", "endl", "printf", "scanf", "malloc", "free", "vector", "string",
+        "map", "set", "pair", "size_t", "NULL", "make_pair", "push_back", "sort"
+    )
+    private val GO_BI = setOf(
+        "fmt", "len", "cap", "make", "append", "panic", "recover", "print", "println", "error",
+        "string", "int", "byte", "rune", "bool", "float64", "int64", "uint", "copy"
+    )
+    private val RUST_BI = setOf(
+        "println", "print", "vec", "format", "panic", "String", "Vec", "Option", "Result",
+        "Some", "None", "Ok", "Err", "Box", "i32", "u32", "usize", "i64", "u64", "f64", "str", "bool"
+    )
+    private val GENERIC_BI = PYTHON_BI + JS_BI + KOTLIN_BI
 }

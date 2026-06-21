@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 夜间:深底 + 浅字。仅覆盖需翻转的色;角标色沿用 day(在深卡上仍可读) -->
-    <color name="jiyue_bg">#16181C</color>
-    <color name="jiyue_card">#20242A</color>
-    <color name="jiyue_text_primary">#E8E6E1</color>
-    <color name="jiyue_text_secondary">#9AA0A8</color>
-    <!-- jiyue_ink 在夜间当「图标/前景」色 → 浅色,深底上可见 -->
-    <color name="jiyue_ink">#E8E6E1</color>
-    <!-- 主按钮夜间:仍深底 + 浅字(白字在浅底会看不见,故按钮底保持深) -->
-    <color name="btn_primary_bg">#2A2F37</color>
-    <color name="btn_primary_text">#ECEAE4</color>
+    <!-- Folio v19 深色:深底 + 高对比浅字 -->
+    <color name="jiyue_bg">#0F1113</color>
+    <color name="jiyue_card">#181B1F</color>
+    <color name="jiyue_text_primary">#ECEAE3</color>
+    <color name="jiyue_text_secondary">#9BA1A8</color>
+    <!-- jiyue_ink 在夜间当「图标/前景」色 → 浅色 -->
+    <color name="jiyue_ink">#ECEAE3</color>
+    <!-- 主按钮:青绿在深底上醒目,白字可读 -->
+    <color name="btn_primary_bg">#2F9C84</color>
+    <color name="btn_primary_text">#FFFFFF</color>
+    <!-- v19 token 深色覆盖 -->
+    <color name="folio_accent">#54BBA2</color>
+    <color name="folio_accent_strong">#7ED0BB</color>
+    <color name="folio_surface2">#22262B</color>
+    <color name="folio_line">#2A2E34</color>
+    <color name="folio_soft">#16302A</color>
+    <color name="folio_code_bg">#1E2127</color>
 </resources>

@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -38,7 +37,6 @@ class TagPickerSheet(
     private lateinit var listBox: LinearLayout
 
     fun show() {
-        val dialog = BottomSheetDialog(ctx)
         val root = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(0, dp(10), 0, dp(12))
@@ -62,8 +60,8 @@ class TagPickerSheet(
         })
         populate()
 
+        val dialog = AdaptiveSheet.create(ctx, root)
         dialog.setOnDismissListener { onDone() }
-        dialog.setContentView(root)
         dialog.show()
     }
 

@@ -19,7 +19,9 @@ data class FileRecord(
     var lastOpened: Long,
     var isFavorite: Boolean,
     var progress: Float,
-    var tags: List<String> = emptyList()
+    var tags: List<String> = emptyList(),
+    // 书架/文档归类覆盖:"book"/"doc"/null(null=按类型自动判)
+    var category: String? = null
 ) {
     fun toJson(): JSONObject = JSONObject().apply {
         put("id", id)
@@ -32,6 +34,7 @@ data class FileRecord(
         put("isFavorite", isFavorite)
         put("progress", progress.toDouble())
         put("tags", JSONArray().apply { tags.forEach { put(it) } })
+        put("category", category ?: JSONObject.NULL)
     }
 
     companion object {
@@ -46,7 +49,8 @@ data class FileRecord(
             lastOpened = o.getLong("lastOpened"),
             isFavorite = o.getBoolean("isFavorite"),
             progress = o.optDouble("progress", 0.0).toFloat(),
-            tags = parseTags(o)
+            tags = parseTags(o),
+            category = if (o.isNull("category")) null else o.optString("category").ifBlank { null }
         )
 
         /** 标签解析 + 向后兼容:无 tags 但有旧 group → 迁移为单标签。 */

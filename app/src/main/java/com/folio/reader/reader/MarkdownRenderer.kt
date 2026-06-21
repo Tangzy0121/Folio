@@ -11,6 +11,7 @@ import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tasklist.TaskListPlugin
 import io.noties.markwon.html.HtmlPlugin
 import io.noties.markwon.image.ImagesPlugin
+import io.noties.markwon.image.file.FileSchemeHandler
 import io.noties.markwon.linkify.LinkifyPlugin
 import io.noties.markwon.recycler.table.TableEntryPlugin
 
@@ -59,7 +60,7 @@ object MarkdownRenderer {
             .usePlugin(TaskListPlugin.create(context))
             .usePlugin(StrikethroughPlugin.create())
             .usePlugin(LinkifyPlugin.create())
-            .usePlugin(ImagesPlugin.create())
+            .usePlugin(ImagesPlugin.create { plugin -> plugin.addSchemeHandler(FileSchemeHandler.create()) })
             .usePlugin(HtmlPlugin.create())
             .usePlugin(JLatexMathPlugin.create(latexSize) { builder ->
                 builder.theme().blockFitCanvas(false)

@@ -65,6 +65,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.constraintlayout)
+    // 首页 书架/文档 左右滑(v24)
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
     // ZIP 网页包本地资源加载(Phase 4)
     implementation(libs.androidx.webkit)
     // Markdown 原生渲染(Phase 2)

@@ -77,28 +77,123 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerContent"
+    <!-- 格式工具栏:仅编辑态显示。左=横滑常用键(代码填充);右=Aa标签开关 + ⋯全部功能 -->
+    <LinearLayout
+        android:id="@+id/editToolbar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingTop="8dp"
-        android:paddingBottom="40dp" />
+        android:layout_height="wrap_content"
+        android:background="@color/jiyue_card"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone">
 
-    <!-- 编辑区:默认隐藏,点「编辑」切出;保存写回库内副本 -->
-    <EditText
-        android:id="@+id/editArea"
+        <HorizontalScrollView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/toolbarButtons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp" />
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/btnToolSwap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:minWidth="40dp"
+            android:padding="8dp"
+            android:text="⇄"
+            android:textColor="@color/jiyue_text_secondary"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/btnToolLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:minWidth="40dp"
+            android:padding="8dp"
+            android:text="Aa"
+            android:textColor="@color/jiyue_text_secondary"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btnToolMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:minWidth="40dp"
+            android:padding="8dp"
+            android:text="⋯"
+            android:textColor="@color/folio_accent"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- 编辑/预览容器:默认竖排;宽屏编辑时代码里改横排(左源码右预览) -->
+    <LinearLayout
+        android:id="@+id/editorSplit"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:fontFamily="monospace"
-        android:gravity="top"
-        android:importantForAutofill="no"
-        android:inputType="textMultiLine|textNoSuggestions"
-        android:padding="16dp"
-        android:scrollbars="vertical"
-        android:textSize="14sp"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerContent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingStart="@dimen/folio_reader_side_pad"
+            android:paddingEnd="@dimen/folio_reader_side_pad"
+            android:paddingTop="8dp"
+            android:paddingBottom="40dp" />
+
+        <EditText
+            android:id="@+id/editArea"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fontFamily="monospace"
+            android:gravity="top"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine|textNoSuggestions"
+            android:padding="16dp"
+            android:scrollbars="vertical"
+            android:textSize="14sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- 字数:仅编辑态显示,常驻右下 -->
+    <TextView
+        android:id="@+id/wordCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/jiyue_card"
+        android:gravity="end"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:text="0 字"
+        android:textColor="@color/jiyue_text_secondary"
+        android:textSize="12sp"
         android:visibility="gone" />
 
 </LinearLayout>

@@ -41,6 +41,7 @@
                 <data android:mimeType="text/plain" />
                 <data android:mimeType="application/zip" />
                 <data android:mimeType="application/x-zip-compressed" />
+                <data android:mimeType="application/pdf" />
             </intent-filter>
 
             <!-- 打开方式接管(VIEW):按扩展名(file:// 来源,如文件管理器) -->
@@ -54,9 +55,11 @@
                 <data android:mimeType="*/*" />
                 <data android:pathPattern=".*\\.md" />
                 <data android:pathPattern=".*\\.markdown" />
+                <data android:pathPattern=".*\\.txt" />
                 <data android:pathPattern=".*\\.html" />
                 <data android:pathPattern=".*\\.htm" />
                 <data android:pathPattern=".*\\.zip" />
+                <data android:pathPattern=".*\\.pdf" />
             </intent-filter>
 
             <!-- 分享面板接管(SEND) -->
@@ -80,6 +83,16 @@
 
         <activity
             android:name=".ui.HtmlReaderActivity"
+            android:exported="false"
+            android:theme="@style/Theme.JiYue" />
+
+        <activity
+            android:name=".ui.GuideActivity"
+            android:exported="false"
+            android:theme="@style/Theme.JiYue" />
+
+        <activity
+            android:name=".ui.PdfReaderActivity"
             android:exported="false"
             android:theme="@style/Theme.JiYue" />
 

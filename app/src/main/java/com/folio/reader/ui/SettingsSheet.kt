@@ -1,6 +1,7 @@
 package com.folio.reader.ui
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Typeface
 import android.util.TypedValue
 import android.view.Gravity
@@ -8,8 +9,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.app.Dialog
 import androidx.appcompat.app.AppCompatDelegate
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.color.MaterialColors
 import com.folio.reader.R
 import com.folio.reader.data.AppPrefs
@@ -29,17 +30,16 @@ class SettingsSheet(
     private lateinit var box: LinearLayout
 
     fun show() {
-        val dialog = BottomSheetDialog(ctx)
         box = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(0, dp(12), 0, dp(14))
         }
+        val dialog = AdaptiveSheet.create(ctx, box)
         populate(dialog)
-        dialog.setContentView(box)
         dialog.show()
     }
 
-    private fun populate(dialog: BottomSheetDialog) {
+    private fun populate(dialog: Dialog) {
         box.removeAllViews()
         box.addView(label("外观"))
         val cur = AppPrefs.nightMode(ctx)
@@ -59,6 +59,12 @@ class SettingsSheet(
             AppPrefs.setShowTags(ctx, !AppPrefs.showTags(ctx))
             onChanged()
             populate(dialog)  // 原地刷新勾选
+        })
+        box.addView(divider())
+        box.addView(label("帮助"))
+        box.addView(row(ctx.getString(R.string.guide_entry), checked = false) {
+            dialog.dismiss()
+            ctx.startActivity(Intent(ctx, GuideActivity::class.java))
         })
     }
 

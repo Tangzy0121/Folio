@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Folio 使用指引</title>
+<style>
+  :root{--bg:#FAF8F3;--surface:#FFFFFF;--surface2:#F4F0E8;--ink:#23211C;--ink2:#6F6A60;--line:#E9E3D7;--accent:#2F9C84;--accent2:#1E7A66;--soft:#E4F1ED;--shadow:rgba(60,50,30,.14);--hot:#2F9C84;}
+  body.dark{--bg:#0F1113;--surface:#181B1F;--surface2:#22262B;--ink:#ECEAE3;--ink2:#9BA1A8;--line:#2A2E34;--accent:#54BBA2;--accent2:#7ED0BB;--soft:#16302A;--shadow:rgba(0,0,0,.5);--hot:#54BBA2;}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;transition:background .3s,color .3s}
+  .bar{flex:0 0 auto;display:flex;align-items:center;padding:14px 18px}.bar .sp{flex:1}
+  .bar button{border:1px solid var(--line);background:var(--surface);color:var(--ink2);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;margin-left:8px}
+  .stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 20px 0;min-height:0}
+  .mockwrap{position:relative;width:270px;max-width:86vw}
+  .mock{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 14px 40px var(--shadow)}
+  .m-top{height:46px;display:flex;align-items:center;gap:4px;padding:0 12px;border-bottom:1px solid var(--line)}
+  .m-top .mt{flex:1;font-size:16px;font-weight:800}.m-top .mi{font-size:15px;color:var(--ink)}
+  .m-top .mb{font-size:9px;font-weight:800;color:var(--accent2);background:var(--soft);padding:2px 6px;border-radius:6px}
+  .m-seg{display:flex;margin:12px;background:var(--surface2);border-radius:11px;padding:3px}
+  .m-seg div{flex:1;text-align:center;padding:8px;font-size:12px;font-weight:800;border-radius:9px;color:var(--ink2)}
+  .m-seg div.on{background:var(--accent);color:#fff}
+  .m-body{padding:0 12px 14px;position:relative;min-height:230px}
+  .m-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+  .m-cover{position:relative;aspect-ratio:2/3;border-radius:7px;color:#fff;padding:7px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 4px 10px var(--shadow);overflow:hidden}
+  .m-cover .ct{font-size:10px;font-weight:800;line-height:1.2;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+  .m-cover .cstar{position:absolute;top:4px;right:4px;font-size:11px;background:rgba(0,0,0,.3);width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .m-cover .cprog{position:absolute;left:0;bottom:0;height:3px;background:rgba(255,255,255,.9)}
+  .m-cover .cread{position:absolute;left:4px;bottom:6px;font-size:7px;font-weight:800;background:var(--accent);padding:1px 5px;border-radius:999px}
+  .m-card{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:9px;margin-bottom:8px}
+  .m-card .ci{width:28px;height:28px;border-radius:8px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:14px}
+  .m-card .cn{font-size:11.5px;font-weight:700}.m-card .cs{font-size:9px;color:var(--ink2)}
+  .m-fab{position:absolute;right:8px;bottom:8px;width:44px;height:44px;border-radius:15px;background:var(--accent);color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px var(--shadow)}
+  .m-text{font-size:12px;line-height:1.7;color:var(--ink);padding:12px 14px}
+  .m-tbar{display:flex;gap:5px;padding:8px;border-bottom:1px solid var(--line);overflow:hidden}
+  .m-tb{display:flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--surface2);border-radius:9px;padding:5px 8px;font-size:11px;font-weight:600;white-space:nowrap}
+  .m-tb .g{color:var(--accent2);font-weight:800}
+  .hot{position:relative;border-radius:12px;outline:2.5px solid var(--hot);outline-offset:2px;animation:pulse 1.4s infinite;z-index:2}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(47,156,132,.5)}70%{box-shadow:0 0 0 12px rgba(47,156,132,0)}100%{box-shadow:0 0 0 0 rgba(47,156,132,0)}}
+  .taptip{position:absolute;background:var(--accent);color:#fff;font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;white-space:nowrap;z-index:5;box-shadow:0 4px 12px var(--shadow)}
+  .cap{margin-top:20px;text-align:center;max-width:340px}
+  .cap .step{font-size:12px;font-weight:800;color:var(--accent2);letter-spacing:1px}
+  .cap .t{font-size:19px;font-weight:800;margin:5px 0 7px}.cap .d{font-size:14px;color:var(--ink2);line-height:1.65}
+  .splash{text-align:center;max-width:340px}.splash .big{font-size:54px}.splash .st{font-size:24px;font-weight:800;margin:10px 0 8px}.splash .sd{font-size:14px;color:var(--ink2);line-height:1.7}
+  .nav{flex:0 0 auto;display:flex;align-items:center;padding:18px 22px 26px;gap:14px}
+  .dots{flex:1;display:flex;justify-content:center;gap:7px}.dot{width:7px;height:7px;border-radius:999px;background:var(--line)}.dot.on{background:var(--accent);width:20px}
+  .nbtn{border:0;border-radius:13px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer}.nbtn.prev{background:var(--surface2);color:var(--ink)}.nbtn.next{background:var(--accent);color:#fff;box-shadow:0 4px 14px var(--shadow)}.nbtn:disabled{opacity:.35}
+</style>
+</head>
+<body>
+  <div class="bar"><div class="sp"></div><button id="themeBtn">🌙 深色</button><button id="skipBtn">跳过</button></div>
+  <div class="stage" id="stage"></div>
+  <div class="nav"><button class="nbtn prev" id="prevBtn">上一步</button><div class="dots" id="dots"></div><button class="nbtn next" id="nextBtn">下一步</button></div>
+<script>
+function listMock(hot){
+  const chips=`<div class="${hot==='chips'?'hot':''}" style="display:flex;gap:6px;padding:10px 12px 4px">
+    <div style="font-size:10px;font-weight:800;background:var(--accent);color:#fff;padding:4px 10px;border-radius:999px">全部</div>
+    <div style="font-size:10px;font-weight:700;background:var(--surface2);color:var(--ink2);padding:4px 10px;border-radius:999px">★ 收藏</div>
+    <div style="font-size:10px;font-weight:700;background:var(--surface2);color:var(--ink2);padding:4px 10px;border-radius:999px">#笔记</div></div>`;
+  const data=[['算法笔记.md','📘','Markdown · 2分钟前',true],['项目说明.html','🌐','HTML · 昨天',false],
+              ['报告.pdf','📕','PDF · 上周',false],['会议纪要.txt','📄','TXT · 工作',false]];
+  const cards=data.map((d,i)=>`<div class="m-card ${i===0&&hot==='card'?'hot':''}"><div class="ci">${d[1]}</div>
+    <div style="flex:1"><div class="cn">${d[0]}</div><div class="cs">${d[2]}</div></div>
+    <div class="${i===0&&hot==='star'?'hot':''}" style="font-size:14px;color:var(--accent2)">${d[3]?'★':'☆'}</div></div>`).join('');
+  return `<div class="mock"><div class="m-top"><div class="mt">Folio</div><div class="mi ${hot==='set'?'hot':''}">⚙</div></div>
+    ${chips}<div class="m-body">${cards}<div class="m-fab ${hot==='fab'?'hot':''}">＋</div></div></div>`;
+}
+function readerMock(hot){const H=t=>hot===t?'hot':'';
+  return `<div class="mock"><div class="m-top"><div class="mi">←</div><div class="mt">算法笔记.md</div>
+    <div class="mi ${H('edit')}">✏️</div><div class="mi ${H('aa')}">Aa</div><div class="mb">MD</div></div>
+    <div class="m-text"><div style="font-size:15px;font-weight:800;margin-bottom:6px">第一章</div>正文按主题渲染……<br><span style="color:var(--accent2)">▎</span> 引用 / 代码 / 公式都支持</div></div>`;}
+function editorMock(){return `<div class="mock"><div class="m-top"><div class="mi">←</div><div class="mt">未命名(编辑中)</div><div class="mi">📖</div><div class="mb">MD</div></div>
+  <div class="m-tbar hot"><div class="m-tb"><span class="g">B</span>粗体</div><div class="m-tb"><span class="g">H</span>标题</div><div class="m-tb"><span class="g">▣</span>代码块</div></div>
+  <div class="m-text" style="font-family:Consolas,monospace"># 我的笔记<br><br>出门没带电脑,**随手改一笔**<br>▏</div></div>`;}
+
+const SLIDES=[
+  {type:'intro',big:'👋',t:'欢迎使用 Folio',d:'纯本地的阅读 & 轻编辑工具:Markdown / TXT / HTML / 网页包 / <b>PDF</b>。花 20 秒带你上手。'},
+  {mock:()=>listMock('card'),tip:'👆 点开',step:'第 1 步 · 文件',t:'你的文件列表',d:'导入过的文件都在这条列表里,点一下就打开阅读。'},
+  {mock:()=>listMock('fab'),tip:'👆 点 ＋',step:'第 2 步 · 添加',t:'导入 / 新建',d:'右下角 <b>＋</b>:导入手机里的文件,或新建一篇空白 Markdown 文档。'},
+  {mock:()=>listMock('chips'),tip:'👆 点筛选',step:'第 3 步 · 整理',t:'收藏 & 标签',d:'点卡片右侧 <b>★</b> 收藏;顶部 chip 切「★收藏」或某个 <b>#标签</b> 快速筛选。'},
+  {mock:()=>readerMock('edit'),tip:'👆 点 ✏️',step:'第 4 步 · 编辑',t:'随手改',d:'Markdown 文档点右上 ✏️ 进编辑,工具栏一点就插入语法;改完自动保存。'},
+  {mock:()=>editorMock(),tip:'👆 点就插入',step:'第 5 步 · 工具栏',t:'不用记语法',d:'粗体 / 标题 / 列表 / 代码块 / 链接… 横滑看全;末尾 ⋯ 是全部功能,Aa 切文字标签。'},
+  {mock:()=>readerMock('aa'),tip:'👆 点 Aa',step:'第 6 步 · 阅读设置',t:'看着舒服',d:'Aa 换主题、字号、深浅、代码配色;深浅默认跟随系统;图片可点开捏合放大。'},
+  {type:'intro',big:'📕',t:'PDF 阅读',d:'<b>PDF</b> 逐页浏览、记到第几页,重开回到上次位置;点页可全屏捏合放大。'},
+  {type:'intro',big:'🎉',t:'开始吧!',d:'忘了功能?随时到 <b>设置 ⚙ → 使用指引</b> 重看。'},
+];
+let idx=0;const stage=document.getElementById('stage'),dots=document.getElementById('dots'),prevBtn=document.getElementById('prevBtn'),nextBtn=document.getElementById('nextBtn');
+function render(){const s=SLIDES[idx];
+  if(s.type==='intro'){stage.innerHTML=`<div class="splash"><div class="big">${s.big}</div><div class="st">${s.t}</div><div class="sd">${s.d}</div></div>`;}
+  else{stage.innerHTML=`<div class="mockwrap">${s.mock()}<div class="taptip" id="tip">${s.tip}</div></div><div class="cap"><div class="step">${s.step}</div><div class="t">${s.t}</div><div class="d">${s.d}</div></div>`;placeTip();}
+  dots.innerHTML='';SLIDES.forEach((_,i)=>{const d=document.createElement('div');d.className='dot'+(i===idx?' on':'');dots.appendChild(d);});
+  prevBtn.disabled=idx===0;nextBtn.textContent=idx===SLIDES.length-1?'开始使用':'下一步';}
+function placeTip(){const hot=stage.querySelector('.hot'),tip=document.getElementById('tip');if(!hot||!tip)return;
+  const wrap=stage.querySelector('.mockwrap').getBoundingClientRect(),r=hot.getBoundingClientRect();
+  let left=r.left-wrap.left+r.width/2-tip.offsetWidth/2,top=r.bottom-wrap.top+10;
+  left=Math.max(4,Math.min(left,wrap.width-tip.offsetWidth-4));tip.style.left=left+'px';tip.style.top=top+'px';}
+function go(n){idx=Math.max(0,Math.min(SLIDES.length-1,idx+n));render();}
+nextBtn.onclick=()=>{if(idx===SLIDES.length-1)done();else go(1);};prevBtn.onclick=()=>go(-1);
+function done(){if(window.Android&&Android.close){Android.close();return;}stage.innerHTML='<div class="splash"><div class="big">✅</div><div class="st">开始使用 Folio</div></div>';}
+document.getElementById('skipBtn').onclick=done;
+const tb=document.getElementById('themeBtn');tb.onclick=()=>{const d=document.body.classList.toggle('dark');tb.textContent=d?'☀️ 浅色':'🌙 深色';const s=SLIDES[idx];if(!(s&&s.type==='intro'))placeTip();};
+window.addEventListener('resize',()=>{const s=SLIDES[idx];if(!(s&&s.type==='intro'))placeTip();});
+render();
+</script>
+</body>
+</html>

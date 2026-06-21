@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Fo 标记:100 单位空间绘制,缩放居中到安全区 -->
+    <group
+        android:translateX="-9.7"
+        android:translateY="-3.2"
+        android:scaleX="1.08"
+        android:scaleY="1.08">
+        <!-- F(描边圆头) -->
+        <path
+            android:pathData="M36.5,32.5 L36.5,74.5 M36.5,32.5 L56.5,32.5 M36.5,52.5 L50.5,52.5"
+            android:strokeColor="#FAF8F3"
+            android:strokeWidth="11"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <!-- o 底环 -->
+        <path
+            android:pathData="M59,60 a13,13 0 1,0 26,0 a13,13 0 1,0 -26,0"
+            android:strokeColor="#BFE6DA"
+            android:strokeWidth="6" />
+        <!-- o 进度弧 -->
+        <path
+            android:pathData="M72,47 A13,13 0 1,1 59.78,64.45"
+            android:strokeColor="#FAF8F3"
+            android:strokeWidth="6"
+            android:strokeLineCap="round" />
+        <!-- 金点 -->
+        <path
+            android:pathData="M68.6,60 a3.4,3.4 0 1,0 6.8,0 a3.4,3.4 0 1,0 -6.8,0"
+            android:fillColor="#F2C14E" />
+    </group>
+</vector>

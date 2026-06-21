@@ -59,6 +59,17 @@
             android:textStyle="bold" />
 
         <ImageButton
+            android:id="@+id/btnBrowser"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="2dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="用浏览器打开"
+            android:padding="9dp"
+            android:src="@drawable/ic_browser"
+            android:visibility="gone" />
+
+        <ImageButton
             android:id="@+id/btnAa"
             android:layout_width="40dp"
             android:layout_height="40dp"

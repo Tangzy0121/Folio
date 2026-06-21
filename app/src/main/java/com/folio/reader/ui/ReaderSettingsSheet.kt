@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.color.MaterialColors
 import com.folio.reader.reader.CodeStyle
 import com.folio.reader.reader.CodeStyles
@@ -45,7 +44,7 @@ class ReaderSettingsSheet(private val ctx: Context, private val onApply: () -> U
         root.addView(buildSize())
         root.addView(label("代码配色"))
         root.addView(buildCodeStyles())
-        BottomSheetDialog(ctx).apply { setContentView(root); show() }
+        AdaptiveSheet.create(ctx, root).show()
     }
 
     private fun label(text: String) = TextView(ctx).apply {

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 宽屏标志:手机 false;sw600dp 起 true(编辑器分栏靠它) -->
+    <bool name="folio_wide_screen">false</bool>
+</resources>

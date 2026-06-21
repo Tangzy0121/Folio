@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 阅读页正文左右留白:手机 0;平板限定符加大让正文限宽居中 -->
+    <dimen name="folio_reader_side_pad">0dp</dimen>
+    <!-- 文件卡片左右外边距:手机 20dp;平板多列时收窄 -->
+    <dimen name="folio_card_h_margin">20dp</dimen>
+</resources>
